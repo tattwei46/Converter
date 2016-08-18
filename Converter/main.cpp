@@ -19,6 +19,7 @@ string bin2hex(string input);
 string hex2dec(string input);
 string hex2bin(string input);
 string checkBin(string input);
+string checkHex(string input);
 
 string in,dec,hex,bin;
 
@@ -85,7 +86,7 @@ void convertHex()
      cout << "\nConverting " << in;
      cout << "\nDEC: " << hex2dec(in);
      cout << "\nBIN: " << hex2bin(in);
-     cout << "\nHEX: " << in;     
+     cout << "\nHEX: " << checkHex(in);     
 }
 void convertBin()
 {
@@ -96,7 +97,7 @@ void convertBin()
      getline(cin,in);
      cout << "\nConverting " << in;
      cout << "\nDEC: " << bin2dec(in);
-     cout << "\nBIN: " << in;
+     cout << "\nBIN: " << checkBin(in);
      cout << "\nHEX: " << bin2hex(in);      
 }
 
@@ -127,7 +128,7 @@ string dec2hex(string input)
     char buffer [33];
     itoa (atoi(input.c_str()),buffer,16);
     output = string(buffer);
-    
+    output = checkHex(output);
     return output;
 }
 
@@ -144,7 +145,8 @@ string bin2dec(string input)
 
 string bin2hex(string input)
 {
-    string output("0x"),tmp;
+    string output(""),tmp;
+    input = checkBin(input);
     
     for (int i=0;i<input.length();i+=4)
     {
@@ -218,7 +220,7 @@ string bin2hex(string input)
     		continue;
     	}
     }
-    
+    output = checkHex(output);
     return output;
 }
 
@@ -317,7 +319,31 @@ string hex2bin(string input)
 
 string checkBin(string input)
 {
-     string output = "0";
-     if (input.length() < 8) return output+input;   
+     string zero = "0";
+     string output = "";
+     int count = 9 - (input.length() + 1);
+     output = input;
+     
+     for (int i = 0; i < count; i++)
+     {
+         output = zero + output;
+     }
+     
+     return output;   
+}
+
+string checkHex(string input)
+{
+     string zero = "0";
+     string head = "0x";
+     string output = "";
+     transform(input.begin(), input.end(), input.begin(), ::toupper);
+     output = input;
+     
+     if (input.length() < 2){
+         output = zero + output;
+     }
+     output = head + output;
+     return output;   
 }
 
